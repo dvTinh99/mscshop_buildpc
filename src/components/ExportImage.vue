@@ -12,7 +12,7 @@
       <div class="max-w-2xl" id="build-pc" ref="printcontent">
         <div class="custom-export-header text-center bg-gray-200 p-4">
           <div>
-            <img :src="Logo" alt="mscshop.vn" width="80" height="80" />
+            <img src="https://mscshop.vn/wp-content/themes/mscshop.vn/html/assets/images/logo1.jpg" alt="mscshop.vn" width="80" height="80" />
           </div>
           <h3 class="uppercase text-2xl mt-2 mb-0">xây dựng cấu hình pc</h3>
         </div>
@@ -88,33 +88,34 @@
 </template>
 
 <script>
-import Logo from '../assets/logo.png';
-import * as htmlToImage from 'html-to-image';
+import html2canvas from 'html2canvas';
 
 export default {
   name: 'ExportImage',
   props: ['selectedPartPC'],
   data() {
     return {
-      Logo,
       showModalExportImage: false,
     };
   },
   methods: {
     async handleExportImage() {
-      //const el = this.$refs.printcontent;
+      const el = this.$refs.printcontent;
 
-      await htmlToImage
-        ?.toJpeg(document.getElementById('build-pc'), {
-          quality: 0.95,
-          backgroundColor: '#fff',
-        })
-        .then(function (dataUrl) {
-          const link = document.createElement('a');
-          link.download = 'build-pc.jpg';
-          link.href = dataUrl;
-          link.click();
-        });
+      const options = {
+        type: 'dataURL',
+        useCORS: true,
+        allowTaint: false,
+      };
+      const printCanvas = await html2canvas(el, options);
+
+      const link = document.createElement('a');
+      link.setAttribute('download', 'build-pc.jpg');
+      link.setAttribute(
+        'href',
+        printCanvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
+      );
+      link.click();
 
       this.showModalExportImage = false;
     },
