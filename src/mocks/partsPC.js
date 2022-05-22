@@ -1,0 +1,18 @@
+export const partPCs = [
+  { id: 1, name: 'Bộ vi xử lý' },
+  { id: 2, name: 'Bo mạch chủ' },
+  { id: 3, name: 'RAM' },
+  { id: 4, name: 'HDD' },
+  { id: 5, name: 'SSD' },
+  { id: 6, name: 'VGA' },
+  { id: 7, name: 'Nguồn' },
+  { id: 8, name: 'Vỏ case' },
+  { id: 9, name: 'Fan case' },
+  { id: 10, name: 'Màn hình' },
+  { id: 11, name: 'Chuột' },
+  { id: 12, name: 'Phím' },
+  { id: 13, name: 'Tản nhiệt khí' },
+  { id: 14, name: 'Tản nhiệt nước AIO' },
+  { id: 15, name: 'Tai nghe' },
+  { id: 16, name: 'Phần mềm' },
+];

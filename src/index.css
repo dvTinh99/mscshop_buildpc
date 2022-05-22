@@ -1,0 +1,23 @@
+@tailwind components;
+@tailwind utilities;
+
+ul {
+  padding-left: 0;
+}
+
+ul li {
+  list-style: none;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+.border-r-solid {
+  border-right: 1px solid #d3d1d1;
+}
+
+.border-b-solid {
+  border-bottom: 1px solid #d3d1d1;
+}
