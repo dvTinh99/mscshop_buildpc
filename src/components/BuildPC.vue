@@ -70,7 +70,7 @@
                       <span class="font-semibold">Bảo hành:</span>
                       {{
                         selectedPart.find((item) => item.key === product.key).guarantee ||
-                        '-'
+                        '0 tháng'
                       }}
                     </p>
                     <p class="mb-1 leading-4">
@@ -159,6 +159,13 @@
         :disabled="selectedPart.length === 0"
       >
         Xem và tải ảnh cấu hình <i class="fa fa-file-image-o ml-1" aria-hidden="true"></i>
+      </button>
+      <button
+        class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        @click.prevent="handlePrint()"
+        :disabled="selectedPart.length === 0"
+      >
+        Xem và in <i class="fa fa-print ml-1" aria-hidden="true"></i>
       </button>
     </div>
   </div>
@@ -299,6 +306,35 @@ export default {
       }, 2000);
 
       this.resetBuildPC();
+    },
+    async handlePrint() {
+      const data = {
+        partPC: this.selectedPart,
+        totalPrice: this.totalPartPC,
+        user_info: {
+          fullname: '',
+          address: '',
+          phone: '',
+          email: ''
+        }
+      };
+      const res = await axios({
+        url: 'https://mscshop.vn/bao-gia',
+        method: 'POST',
+        responseType: 'blob',
+        data,
+        headers: {
+          Authorization:
+            'Basic ' +
+            btoa(
+              '5492d44e822df10d3626d1af0b7692871e7718d85214fe405958daec6871e53d:cs_300c7cc3f4de5bbfea7a918e95264a9f2be410db'
+            ),
+        },
+      });
+
+      const blob = new Blob([res.data], { type: 'text/html' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
     },
     openExportToImage() {
       this.$refs.modalExportImage.showModalExportImage = true;

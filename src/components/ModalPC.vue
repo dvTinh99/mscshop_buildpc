@@ -141,7 +141,7 @@
                 </p>
                 <p class="mb-1 leading-4">
                   <span class="font-semibold">Bảo hành:</span>
-                  {{ product.guarantee || '-' }}
+                  {{ product.guarantee || '0 tháng' }}
                 </p>
                 <p class="mb-1 leading-4">
                   <span class="font-semibold">Kho hàng:</span> Liên hệ
