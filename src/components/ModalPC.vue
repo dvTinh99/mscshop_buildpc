@@ -216,7 +216,9 @@ export default {
         const res = this.detailPart?.filter.map((el) => {
           return {
             ...el,
-            items: el.items.filter((sub_el) => sub_el === this.filterItem),
+            items: this.checkDuplicate(el.items).length
+              ? this.checkDuplicate(el.items)
+              : el.items,
           };
         });
         return res;
@@ -275,10 +277,17 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     company(newVal, oldVal) {
+      console.log({ newVal });
       this.filterItem = newVal[0];
     },
   },
   methods: {
+    checkDuplicate(arr) {
+      return arr.reduce(
+        (acc, cur) => (this.company.includes(cur) ? [...acc, cur] : acc),
+        []
+      );
+    },
     addProduct(product) {
       this.$emit('add-product', { ...product, quantity: this.quantity });
       this.showModalPC = false;

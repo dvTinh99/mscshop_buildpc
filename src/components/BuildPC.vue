@@ -167,6 +167,13 @@
       >
         Xem và in <i class="fa fa-print ml-1" aria-hidden="true"></i>
       </button>
+      <button
+        class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        @click.prevent="handlePrint()"
+        :disabled="selectedPart.length === 0"
+      >
+        Thêm vào giỏ hàng <i class="fa fa-cart ml-1" aria-hidden="true"></i>
+      </button>
     </div>
   </div>
 
