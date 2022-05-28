@@ -169,7 +169,7 @@
       </button>
       <button
         class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
-        @click.prevent="handlePrint()"
+        @click.prevent="handleAddToCart()"
         :disabled="selectedPart.length === 0"
       >
         Thêm vào giỏ hàng <i class="fa fa-cart ml-1" aria-hidden="true"></i>
@@ -282,6 +282,32 @@ export default {
         this.resetBuildPC();
       }
     },
+    async handleAddToCart() {
+      try {
+        const data = {
+          partPC: this.selectedPart,
+          totalPrice: this.totalPartPC,
+        };
+        await axios({
+          url: 'https://mscshop.vn/add-to-cart',
+          data,
+          method: 'POST',
+          headers: {
+            Authorization:
+              'Basic ' +
+              btoa(
+                'ck_fe0716604f94669b17f35ebaff4c47b31d56d8be:ck_fe0716604f94669b17f35ebaff4c47b31d56d8be'
+              ),
+          },
+        });
+
+        window.alert('Thêm vào giỏ hàng thành công');
+      } catch (error) {
+        window.alert('Lỗi xảy ra, vui lòng thử lại');
+      } finally {
+        this.resetBuildPC();
+      }
+    },
     async handleExportToExcel() {
       const data = {
         partPC: this.selectedPart,
@@ -322,8 +348,8 @@ export default {
           fullname: '',
           address: '',
           phone: '',
-          email: ''
-        }
+          email: '',
+        },
       };
       const res = await axios({
         url: 'https://mscshop.vn/bao-gia',
