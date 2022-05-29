@@ -169,7 +169,7 @@
       </button>
       <button
         class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
-        @click.prevent="handleAddToCart()"
+        @click="handleAddToCart()"
         :disabled="selectedPart.length === 0"
       >
         Thêm vào giỏ hàng <i class="fa fa-cart ml-1" aria-hidden="true"></i>
@@ -306,6 +306,7 @@ export default {
         window.alert('Lỗi xảy ra, vui lòng thử lại');
       } finally {
         this.resetBuildPC();
+        window.location.reload()
       }
     },
     async handleExportToExcel() {

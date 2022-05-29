@@ -93,7 +93,7 @@
             <li class="!mb-0">
               <button
                 @click="handlePrevPage()"
-                class="w-8 h-8 !p-0 !mb-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none"
+                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none"
               >
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </button>
@@ -101,7 +101,7 @@
             <li class="!mb-0" v-for="(page, index) in totalPages" :key="index">
               <button
                 @click="getDataPaginate(page)"
-                class="w-8 h-8 !p-0 !mb-0 text-center ml-2 bg-gray-200 rounded outline-none"
+                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 bg-gray-200 rounded outline-none"
                 :class="{ 'border border-red-600': page === currentPage }"
               >
                 {{ page }}
@@ -110,7 +110,7 @@
             <li class="!mb-0">
               <button
                 @click="handleNextPage()"
-                class="w-8 h-8 !p-0 !mb-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none"
+                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none"
               >
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </button>
@@ -119,7 +119,7 @@
         </div>
 
         <div
-          class="overflow-y-auto md:max-h-[490px] lg:max-h-[470px] h-full custom-modal-pc-right"
+          class="overflow-y-auto md:max-h-[490px] lg:max-h-[485px] h-full custom-modal-pc-right"
         >
           <div
             v-for="product in filteredProduct"
@@ -157,7 +157,7 @@
               </div>
             </div>
             <button
-              class="flex xs:mt-4 lg:mt-0 items-center justify-center leading-3 py-1 px-3 h-9 rounded uppercase bg-blue-500 text-white font-semibold"
+              class="flex xs:mt-4 lg:mt-0 items-center justify-center leading-3 py-1 px-3 h-9 rounded uppercase bg-blue-500 text-white text-[13px] font-semibold"
               @click="addProduct(product)"
             >
               Thêm vào cấu hình
