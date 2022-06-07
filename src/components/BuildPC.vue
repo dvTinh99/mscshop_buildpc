@@ -30,7 +30,7 @@
         v-for="(product, index) in products"
         :key="product.id"
       >
-        <div class="xs:max-w-[200px] md:max-w-xs w-full border-r-solid">
+        <div class="xs:max-w-[180px] md:max-w-xs w-full border-r-solid">
           <div class="text-sm font-semibold pl-5 py-4">
             {{ index + 1 }}. {{ product.title }}
           </div>
@@ -129,46 +129,46 @@
             <button
               v-else
               @click="handleOpenModal(product)"
-              class="bg-red-500 text-white font-semibold rounded-[4px] text-sm xs:p-2 md:py-2 md:px-3"
+              class="bg-red-500 text-white font-semibold rounded-[4px] text-sm xs:p-1 md:py-2 md:px-3"
             >
-              Chọn {{ product.title }} <i class="fa fa-plus ml-2" aria-hidden="true"></i>
+              Chọn {{ product.title }} <i class="fa fa-plus ml-2 xs:hidden md:inline-block" aria-hidden="true"></i>
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flex mt-6">
+    <div class="flex mt-6 justify-between gap-1 xs:flex-wrap lg:flex-nowrap">
       <button
-        class="bg-red-500 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
         @click="openSaveBuildPC()"
         :disabled="selectedPart.length === 0"
       >
         Lưu cấu hình <i class="fa fa-floppy-o ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
         @click="handleExportToExcel()"
         :disabled="selectedPart.length === 0"
       >
         Xuất file excel <i class="fa fa-file-excel-o ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
         @click.prevent="openExportToImage()"
         :disabled="selectedPart.length === 0"
       >
         Xem và tải ảnh cấu hình <i class="fa fa-file-image-o ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
         @click.prevent="handlePrint()"
         :disabled="selectedPart.length === 0"
       >
         Xem và in <i class="fa fa-print ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 text-sm ml-2 xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
         @click="handleAddToCart()"
         :disabled="selectedPart.length === 0"
       >

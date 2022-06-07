@@ -6,7 +6,7 @@
     name="modal-pc"
     lock-scroll="false"
     classes="flex justify-center items-center"
-    content-class="xs:max-w-[22rem] md:max-w-[46rem] lg:max-w-7xl w-full relative xs:max-h-[640px] h-full flex !flex-col bg-white custom-modal-pc"
+    content-class="xs:max-w-[23rem] md:max-w-[46rem] lg:max-w-7xl w-full relative xs:max-h-[640px] h-full flex !flex-col bg-white custom-modal-pc"
   >
     <div
       class="bg-red-500 xs:py-3 flex justify-between items-center lg:pt-[2px] lg:pb-[2px] pl-3 pr-16"
