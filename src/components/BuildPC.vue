@@ -13,7 +13,7 @@
       >
         Làm mới <i class="fa fa-refresh ml-1" aria-hidden="true"></i>
       </button>
-      <p class="text-red-500 text-lg font-medium">
+      <p class="text-red-500 xs:text-sm lg:text-lg font-medium">
         Chi phí dự tính:
         {{
           new Intl.NumberFormat('vi-VN', {
@@ -30,22 +30,22 @@
         v-for="(product, index) in products"
         :key="product.id"
       >
-        <div class="xs:max-w-[180px] md:max-w-xs w-full border-r-solid">
-          <div class="text-sm font-semibold pl-5 py-4">
+        <div class="xs:max-w-[130px] md:max-w-xs w-full border-r-solid">
+          <div class="text-sm font-semibold xs:pl-1 md:pl-5 py-4">
             {{ index + 1 }}. {{ product.title }}
           </div>
         </div>
 
         <div class="flex-1">
-          <div class="px-5 py-2">
+          <div class="xs:px-2 lg:px-5 py-2">
             <template
               v-if="
                 selectedPart.length > 0 &&
                 selectedPart.find((item) => item.key === product.key)
               "
             >
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
+              <div class="flex xs:flex-col lg:flex-row lg:items-center lg:justify-between">
+                <div class="flex xs:flex-col lg:flex-row lg:items-center">
                   <img
                     class="w-[100px] h-[100px] object-cover"
                     :src="
@@ -54,12 +54,12 @@
                     "
                     alt=""
                   />
-                  <div class="ml-5 flex flex-col max-w-lg">
-                    <p class="font-semibold leading-4 mb-1 break-words">
+                  <div class="lg:ml-5 flex flex-col max-w-[18rem]">
+                    <p class="font-semibold text-sm leading-5 mb-1 break-words">
                       {{ selectedPart.find((item) => item.key === product.key).name }}
                     </p>
                     <p class="mb-1 leading-4">
-                      <span class="font-semibold"
+                      <span class="text-sm"
                         >Mã SP:
                         {{
                           selectedPart.find((item) => item.key === product.key).id
@@ -67,19 +67,19 @@
                       >
                     </p>
                     <p class="mb-1 leading-4">
-                      <span class="font-semibold">Bảo hành:</span>
+                      <span class="text-sm">Bảo hành:</span>
                       {{
                         selectedPart.find((item) => item.key === product.key).guarantee ||
                         '0 tháng'
                       }}
                     </p>
                     <p class="mb-1 leading-4">
-                      <span class="font-semibold">Kho hàng:</span> Liên hệ
+                      <span class="text-sm">Kho hàng:</span> Liên hệ
                     </p>
                   </div>
                 </div>
-                <div class="flex items-center">
-                  <span class="font-bold"
+                <div class="flex xs:flex-col lg:flex-row lg:items-center">
+                  <span class="font-bold text-sm"
                     >{{
                       new Intl.NumberFormat('vi-VN', {
                         style: 'currency',
@@ -102,7 +102,7 @@
                     "
                   />
                   =
-                  <span class="text-red-500 font-bold">
+                  <span class="text-red-500 font-bold text-sm">
                     {{
                       new Intl.NumberFormat('vi-VN', {
                         style: 'currency',
@@ -129,46 +129,46 @@
             <button
               v-else
               @click="handleOpenModal(product)"
-              class="bg-red-500 text-white font-semibold rounded-[4px] text-sm xs:p-1 md:py-2 md:px-3"
+              class="bg-red-500 text-white font-semibold rounded-[4px] text-sm capitalize xs:p-1 md:py-2 md:px-3"
             >
-              Chọn {{ product.title }} <i class="fa fa-plus ml-2 xs:hidden md:inline-block" aria-hidden="true"></i>
+              <i class="fa fa-plus" aria-hidden="true"></i>  Chọn {{ product.title }}
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flex mt-6 justify-between gap-1 xs:flex-wrap lg:flex-nowrap">
+    <div class="flex mt-6 gap-1 xs:flex-wrap lg:flex-nowrap">
       <button
-        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-auto text-sm xs:px-3 md:px-3 rounded text-white font-semibold uppercase"
         @click="openSaveBuildPC()"
         :disabled="selectedPart.length === 0"
       >
         Lưu cấu hình <i class="fa fa-floppy-o ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-auto text-sm xs:px-3 md:px-3 rounded text-white font-semibold uppercase"
         @click="handleExportToExcel()"
         :disabled="selectedPart.length === 0"
       >
         Xuất file excel <i class="fa fa-file-excel-o ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-auto text-sm xs:px-3 md:px-3 rounded text-white font-semibold uppercase"
         @click.prevent="openExportToImage()"
         :disabled="selectedPart.length === 0"
       >
         Xem và tải ảnh cấu hình <i class="fa fa-file-image-o ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-auto text-sm xs:px-3 md:px-3 rounded text-white font-semibold uppercase"
         @click.prevent="handlePrint()"
         :disabled="selectedPart.length === 0"
       >
         Xem và in <i class="fa fa-print ml-1" aria-hidden="true"></i>
       </button>
       <button
-        class="bg-red-500 xs:w-full lg:w-1/5 text-sm xs:px-3 py-2 md:px-3 rounded text-white font-semibold uppercase"
+        class="bg-red-500 xs:w-full lg:w-auto text-sm xs:px-3 md:px-3 rounded text-white font-semibold uppercase"
         @click="handleAddToCart()"
         :disabled="selectedPart.length === 0"
       >

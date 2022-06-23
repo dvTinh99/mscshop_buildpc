@@ -277,7 +277,6 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     company(newVal, oldVal) {
-      console.log({ newVal });
       this.filterItem = newVal[0];
     },
   },
