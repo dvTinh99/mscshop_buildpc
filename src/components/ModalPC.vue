@@ -51,8 +51,8 @@
 
           <div
             class="border-b-solid mb-3"
-            v-for="(filter, index) in filterList"
-            :key="index"
+            v-for="filter in filterList"
+            :key="filter?.key"
           >
             <h4 class="font-semibold">{{ filter?.name }}</h4>
             <ul class="flex flex-wrap justify-between items-center">
@@ -60,12 +60,12 @@
                 <label class="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    :data-id="item"
+                    :data-id="item?.key"
                     class="w-4 h-4 !mb-0 flex-shrink-0"
-                    :value="item"
+                    :value="item?.key"
                     v-model="company"
                   />
-                  <span class="ml-2 leading-5">{{ item }}</span>
+                  <span class="ml-2 leading-5">{{ item?.name }}</span>
                 </label>
               </li>
             </ul>
@@ -102,7 +102,7 @@
               <button
                 @click="getDataPaginate(page)"
                 class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 bg-gray-200 rounded outline-none"
-                :class="{ 'border border-red-600': page === currentPage }"
+                :class="{ 'border bg-[#F24C4C]': page === currentPage }"
               >
                 {{ page }}
               </button>
@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import difference from 'lodash/difference';
+//import difference from 'lodash/difference';
 import { priceRanges } from '../mocks/priceRanges';
 
 export default {
@@ -179,16 +179,13 @@ export default {
   props: ['partID'],
   computed: {
     filteredProduct() {
-      if (!this.detailPart?.filter) return this.detailPart?.products;
+      if (!this.filterLists) return this.productList;
 
-      return this.detailPart?.products
+      return this.productList
         ?.filter((product) => {
-          const valueAttr = Object.values(product.attr);
           return (
             (this.searchText.length === 0 ||
               product.name.toLowerCase().includes(this.searchText)) &&
-            (this.company.length === 0 ||
-              difference(this.company, valueAttr).length === 0) &&
             (this.prices.length === 0 ||
               (this.prices === 'Dưới 2 triệu' && product.price < 2000000) ||
               (this.prices === '2 triệu - 5 triệu' &&
@@ -211,9 +208,9 @@ export default {
     },
     filterList() {
       if (!this.filterItem) {
-        return this.detailPart?.filter;
+        return this.filterLists;
       } else {
-        const res = this.detailPart?.filter.map((el) => {
+        const res = this.filterLists.map((el) => {
           return {
             ...el,
             items: this.checkDuplicate(el.items).length
@@ -225,7 +222,7 @@ export default {
       }
     },
     totalPages() {
-      return Math.ceil(this.detailPart?.products?.length / 10);
+      return Math.ceil(this.productList?.length / 10);
     },
   },
   data() {
@@ -236,6 +233,8 @@ export default {
       sortBy: 'asc',
       showModalPC: false,
       detailPart: null,
+      productList: [],
+      filterLists: [],
       currentPage: 1,
       startIndex: 0,
       endIndex: 10,
@@ -255,35 +254,58 @@ export default {
         this.currentPage = 1;
         this.filteredProduct = [];
         this.quantity = 1;
+        this.productList = [];
+        this.filterLists = [];
       }
     },
     partID(newVal, oldVal) {
       if (newVal !== oldVal) {
-        fetch(`https://mscshop.vn/wp-json/wp/v3/all-product?category=${this.partID}`, {
+        fetch(`https://mscshop.vn/wp-json/wp/v3/all-taxonomy?category=${this.partID}`, {
           method: 'GET',
-          headers: {
-            Authorization:
-              'Basic ' +
-              btoa(
-                'ck_fe0716604f94669b17f35ebaff4c47b31d56d8be:cs_300c7cc3f4de5bbfea7a918e95264a9f2be410db'
-              ),
-          },
         })
           .then((res) => res.json())
           .then((data) => {
             this.detailPart = data;
+            this.productList = data.products;
+            this.filterLists = data.filter;
           });
       }
     },
     // eslint-disable-next-line no-unused-vars
     company(newVal, oldVal) {
       this.filterItem = newVal[0];
+
+      // call api filter product
+      const filterList = [...newVal];
+      if (newVal.length > 0) {
+        fetch(
+          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=[${filterList}]`,
+          {
+            method: 'GET',
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            this.productList = data?.products;
+          });
+      } else {
+        fetch(
+          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=["${this.partID}"]`,
+          {
+            method: 'GET',
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            this.productList = data?.products;
+          });
+      }
     },
   },
   methods: {
     checkDuplicate(arr) {
       return arr.reduce(
-        (acc, cur) => (this.company.includes(cur) ? [...acc, cur] : acc),
+        (acc, cur) => (this.company.includes(cur.key) ? [...acc, cur] : acc),
         []
       );
     },
