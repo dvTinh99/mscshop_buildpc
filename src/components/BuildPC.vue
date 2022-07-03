@@ -35,42 +35,43 @@
             {{ index + 1 }}. {{ product.title }}
           </div>
         </div>
-
         <div class="flex-1">
           <div class="xs:px-2 lg:px-5 py-2">
             <template
               v-if="
                 selectedPart.length > 0 &&
-                selectedPart.find((item) => item.key === product.key)
+                selectedPart.find((item) => item.key === product.id)
               "
             >
-              <div class="flex xs:flex-col lg:flex-row lg:items-center lg:justify-between">
+              <div
+                class="flex xs:flex-col lg:flex-row lg:items-center lg:justify-between"
+              >
                 <div class="flex xs:flex-col lg:flex-row lg:items-center">
                   <img
                     class="w-[100px] h-[100px] object-cover"
                     :src="
-                      selectedPart.find((item) => item.key === product.key).image ||
+                      selectedPart.find((item) => item.key === product.id).image ||
                       'https://via.placeholder.com/260'
                     "
                     alt=""
                   />
                   <div class="lg:ml-5 flex flex-col max-w-[18rem]">
                     <p class="font-semibold text-sm leading-5 mb-1 break-words">
-                      {{ selectedPart.find((item) => item.key === product.key).name }}
+                      {{ selectedPart.find((item) => item.key === product.id).name }}
                     </p>
                     <p class="mb-1 leading-4">
                       <span class="text-sm"
                         >Mã SP:
                         {{
-                          selectedPart.find((item) => item.key === product.key).id
+                          selectedPart.find((item) => item.key === product.id).id
                         }}</span
                       >
                     </p>
                     <p class="mb-1 leading-4">
                       <span class="text-sm">Bảo hành:</span>
                       {{
-                        selectedPart.find((item) => item.key === product.key).guarantee ||
-                        '0 tháng'
+                        selectedPart.find((item) => item.key === product.key)
+                          ?.guarantee || '0 tháng'
                       }}
                     </p>
                     <p class="mb-1 leading-4">
@@ -85,7 +86,7 @@
                         style: 'currency',
                         currency: 'VND',
                       }).format(
-                        selectedPart.find((item) => item.key === product.key).price
+                        selectedPart.find((item) => item.key === product.id).price
                       )
                     }}
                     x
@@ -96,9 +97,7 @@
                     v-model="quantity"
                     class="border ml-2 px-1 !max-w-[60px] w-full border-black outline-none"
                     @change="
-                      updateQuantity(
-                        selectedPart.find((item) => item.key === product.key)
-                      )
+                      updateQuantity(selectedPart.find((item) => item.key === product.id))
                     "
                   />
                   =
@@ -108,7 +107,7 @@
                         style: 'currency',
                         currency: 'VND',
                       }).format(
-                        selectedPart.find((item) => item.key === product.key).price *
+                        selectedPart.find((item) => item.key === product.id).price *
                           quantity
                       )
                     }}</span
@@ -116,9 +115,7 @@
                 </div>
                 <button
                   @click="
-                    removePartPC(
-                      selectedPart.find((item) => item.key === product.key).key
-                    )
+                    removePartPC(selectedPart.find((item) => item.key === product.id).key)
                   "
                   class="text-red-500 !mb-0 !text-xl items-center bg-transparent flex border-0 border-transparent"
                 >
@@ -131,7 +128,7 @@
               @click="handleOpenModal(product)"
               class="bg-red-500 text-white font-semibold rounded-[4px] text-sm capitalize xs:p-1 md:py-2 md:px-3"
             >
-              <i class="fa fa-plus" aria-hidden="true"></i>  Chọn {{ product.title }}
+              <i class="fa fa-plus" aria-hidden="true"></i> Chọn {{ product.title }}
             </button>
           </div>
         </div>
@@ -306,7 +303,7 @@ export default {
         window.alert('Lỗi xảy ra, vui lòng thử lại');
       } finally {
         this.resetBuildPC();
-        window.location.reload()
+        window.location.reload();
       }
     },
     async handleExportToExcel() {

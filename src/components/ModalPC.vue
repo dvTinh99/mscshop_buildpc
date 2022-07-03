@@ -37,21 +37,9 @@
         </div>
 
         <div class="overflow-y-auto md:max-h-[465px] lg:max-h-[473px] h-full">
-          <div>
-            <h4 class="font-semibold">Khoảng giá</h4>
-            <div class="flex flex-wrap justify-between items-center">
-              <select class="outline-none p-2 w-[170px]" v-model="prices">
-                <option value="">Chọn khoảng giá</option>
-                <option v-for="price in priceRanges" :key="price.id" :value="price.label">
-                  {{ price.label }}
-                </option>
-              </select>
-            </div>
-          </div>
-
           <div
             class="border-b-solid mb-3"
-            v-for="filter in filterList"
+            v-for="filter in filterLists"
             :key="filter?.key"
           >
             <h4 class="font-semibold">{{ filter?.name }}</h4>
@@ -184,17 +172,8 @@ export default {
       return this.productList
         ?.filter((product) => {
           return (
-            (this.searchText.length === 0 ||
-              product.name.toLowerCase().includes(this.searchText)) &&
-            (this.prices.length === 0 ||
-              (this.prices === 'Dưới 2 triệu' && product.price < 2000000) ||
-              (this.prices === '2 triệu - 5 triệu' &&
-                product.price >= 2000000 &&
-                product.price < 5000000) ||
-              (this.prices === '5 triệu - 10 triệu' &&
-                product.price >= 5000000 &&
-                product.price < 10000000) ||
-              (this.prices === 'Trên 10 triệu' && product.price >= 10000000))
+            this.searchText.length === 0 ||
+            product.name.toLowerCase().includes(this.searchText)
           );
         })
         .sort((a, b) => {
@@ -206,21 +185,21 @@ export default {
         })
         .slice(this.startIndex, this.endIndex);
     },
-    filterList() {
-      if (!this.filterItem) {
-        return this.filterLists;
-      } else {
-        const res = this.filterLists.map((el) => {
-          return {
-            ...el,
-            items: this.checkDuplicate(el.items).length
-              ? this.checkDuplicate(el.items)
-              : el.items,
-          };
-        });
-        return res;
-      }
-    },
+    // filterList() {
+    //   if (!this.filterItem) {
+    //     return this.filterLists;
+    //   } else {
+    //     const res = this.filterLists.map((el) => {
+    //       return {
+    //         ...el,
+    //         items: this.checkDuplicate(el.items).length
+    //           ? this.checkDuplicate(el.items)
+    //           : el.items,
+    //       };
+    //     });
+    //     return res;
+    //   }
+    // },
     totalPages() {
       return Math.ceil(this.productList?.length / 10);
     },
@@ -228,7 +207,6 @@ export default {
   data() {
     return {
       company: [],
-      prices: '',
       searchText: '',
       sortBy: 'asc',
       showModalPC: false,
@@ -255,7 +233,7 @@ export default {
         this.filteredProduct = [];
         this.quantity = 1;
         this.productList = [];
-        this.filterLists = [];
+        //this.filterLists = [];
       }
     },
     partID(newVal, oldVal) {
@@ -279,7 +257,7 @@ export default {
       const filterList = [...newVal];
       if (newVal.length > 0) {
         fetch(
-          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=[${filterList}]`,
+          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=${this.partID},${filterList.join(",")}`,
           {
             method: 'GET',
           }
@@ -287,10 +265,11 @@ export default {
           .then((res) => res.json())
           .then((data) => {
             this.productList = data?.products;
+            this.filterLists = data?.filters;
           });
       } else {
         fetch(
-          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=["${this.partID}"]`,
+          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=${this.partID}`,
           {
             method: 'GET',
           }
@@ -298,6 +277,7 @@ export default {
           .then((res) => res.json())
           .then((data) => {
             this.productList = data?.products;
+            this.filterLists = data?.filters;
           });
       }
     },
