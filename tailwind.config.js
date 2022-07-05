@@ -1,11 +1,16 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  variants: {
+    extend: {
+      backgroundColor: ['disabled'],
+    },
+  },
   theme: {
     extend: {
       corePlugins: {
         preflight: false,
         //aspectRatio: false
-      }
+      },
     },
     screens: {
       xs: '320px',

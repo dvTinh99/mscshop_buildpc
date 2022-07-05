@@ -53,7 +53,7 @@
                     :value="item?.key"
                     v-model="company"
                   />
-                  <span class="ml-2 leading-5">{{ item?.name }}</span>
+                  <span class="ml-2 leading-5">{{ item?.name }} ({{ item?.count }})</span>
                 </label>
               </li>
             </ul>
@@ -81,7 +81,8 @@
             <li class="!mb-0">
               <button
                 @click="handlePrevPage()"
-                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none"
+                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none hover:bg-gray-300 disabled:bg-gray-300"
+                :disabled="currentPage === 1"
               >
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </button>
@@ -89,8 +90,9 @@
             <li class="!mb-0" v-for="(page, index) in totalPages" :key="index">
               <button
                 @click="getDataPaginate(page)"
-                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 bg-gray-200 rounded outline-none"
-                :class="{ 'border bg-[#F24C4C]': page === currentPage }"
+                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 bg-gray-200 rounded outline-none hover:bg-gray-300 disabled:bg-gray-300"
+                :class="{ 'border text-white bg-[#F24C4C]': page === currentPage }"
+                :disabled="page === '...'"
               >
                 {{ page }}
               </button>
@@ -98,13 +100,15 @@
             <li class="!mb-0">
               <button
                 @click="handleNextPage()"
-                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none"
+                class="w-8 h-8 !p-0 !mb-0 !mr-0 text-center ml-2 border-0 bg-gray-200 rounded outline-none hover:bg-gray-300 disabled:bg-gray-300"
+                :disabled="hasLastPage"
               >
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </button>
             </li>
           </ul>
         </div>
+        <!-- end pagination -->
 
         <div
           class="overflow-y-auto md:max-h-[490px] lg:max-h-[485px] h-full custom-modal-pc-right"
@@ -159,6 +163,7 @@
 </template>
 
 <script>
+import getPage from '@/utils/calcPaginate';
 //import difference from 'lodash/difference';
 import { priceRanges } from '../mocks/priceRanges';
 
@@ -201,7 +206,12 @@ export default {
     //   }
     // },
     totalPages() {
-      return Math.ceil(this.productList?.length / 10);
+      //const pageList = Math.ceil(this.productList?.length / 10);
+      const { pages } = getPage(this.productList?.length, this.currentPage);
+      return pages;
+    },
+    hasLastPage() {
+      return this.currentPage === this.totalPages[this.totalPages.length - 2];
     },
   },
   data() {
@@ -257,7 +267,9 @@ export default {
       const filterList = [...newVal];
       if (newVal.length > 0) {
         fetch(
-          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=${this.partID},${filterList.join(",")}`,
+          `https://mscshop.vn/wp-json/wp/v3/filter-product?categories=${
+            this.partID
+          },${filterList.join(',')}`,
           {
             method: 'GET',
           }
@@ -305,7 +317,7 @@ export default {
       this.getDataPaginate(this.currentPage);
     },
     handleNextPage() {
-      if (this.currentPage < this.totalPages) {
+      if (this.currentPage !== this.totalPages[this.totalPages.length - 1]) {
         this.currentPage++;
       }
       this.getDataPaginate(this.currentPage);
